@@ -33,11 +33,11 @@ SELECT COUNT(DISTINCT edad) FROM usuarios_lenguajes WHERE lenguaje = 'Java';
 
 -- Ejercicio 9: Seleccionar los usuarios que no saben ningún lenguaje.
 -- Tu respuesta aquí
-SELECT * FROM usuarios_lenguajes WHERE lenguaje IS NULL;
+SELECT * FROM usuarios_lenguajes WHERE lenguaje IS NULL OR lenguaje = '';
 
 -- Ejercicio 10: Encontrar el nombre y edad del usuario más joven.
 -- Tu respuesta aquí
-SELECT * FROM usuarios_lenguajes ORDER BY edad ASC LIMIT 1;
+SELECT nombre, edad FROM usuarios_lenguajes ORDER BY edad ASC LIMIT 1;
 
 -- Ejercicio 11: Seleccionar los usuarios y sus edades ordenados por edad de forma descendente.
 -- Tu respuesta aquí
@@ -53,7 +53,8 @@ SELECT * FROM usuarios_lenguajes WHERE apellido LIKE '%a%';
 
 -- Ejercicio 14: Encontrar el lenguaje más popular entre los usuarios menores de 30 años.
 -- Tu respuesta aquí
---No lo supe hacer
+SELECT lenguaje, COUNT(*) FROM usuarios_lenguajes WHERE edad < 30 GROUP BY lenguaje;
+SELECT lenguaje, COUNT(lenguaje) AS popular FROM usuarios_lenguajes WHERE edad < 30 GROUP BY lenguaje ORDER BY popular DESC;
 
 -- Ejercicio 15: Seleccionar el usuario  mayor de 25 y que sepa el lenguaje 'TypeScript'.
 -- Tu respuesta aquí
@@ -73,7 +74,7 @@ SELECT * FROM usuarios_lenguajes WHERE email LIKE '%example%';
 
 -- Ejercicio 19: Seleccionar los usuarios que saben al menos un lenguaje y tienen una edad entre 25 y 35 años.
 -- Tu respuesta aquí
-SELECT * FROM usuarios_lenguajes WHERE lenguaje IS NOT NULL AND edad BETWEEN 25 AND 35;
+SELECT * FROM usuarios_lenguajes WHERE lenguaje IS NOT NULL AND lenguaje != '' AND edad BETWEEN 25 AND 35;
 
 -- Ejercicio 20: Contar cuántos usuarios tienen un lenguaje asociado llamado 'CSS' y tienen menos de 30 años.
 -- Tu respuesta aquí
@@ -139,6 +140,7 @@ SELECT lenguaje, CHAR_LENGTH(lenguaje) AS longest_language FROM usuarios_lenguaj
 -- Tu respuesta aquí
 SELECT nombre, apellido, (edad - (SELECT AVG(edad) AS avg_edad FROM usuarios_lenguajes)) AS resta FROM usuarios_lenguajes group by nombre, apellido, edad;
 SELECT nombre, apellido, CASE WHEN edad > (SELECT AVG(edad) AS avg_edad FROM usuarios_lenguajes) THEN edad -  (SELECT AVG(edad) AS avg_edad FROM usuarios_lenguajes) ELSE (SELECT AVG(edad) AS avg_edad FROM usuarios_lenguajes) - edad END AS resta FROM usuarios_lenguajes;
+SELECT edad - (SELECT AVG(edad) FROM usuarios_lenguajes AS edad_promedio) AS diferencia FROM usuarios_lenguajes;
 
 -- Ejercicio 36: Contar cuántos usuarios tienen un lenguaje asociado que contiene la palabra 'Script'.
 -- Tu respuesta aquí
